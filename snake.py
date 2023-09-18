@@ -15,7 +15,7 @@ GRÜN = (0, 255, 0)
 ROT = (255, 0, 0)
 BLAU = (0, 0, 255)
 
-hintergrund_farbe = SCHWARZ
+hintergrund_farbe = GRÜN
 
 # Bildschirm mit Maßen erstellen
 bildschirm = pygame.display.set_mode((bildschirm_breite, bildschirm_höhe))

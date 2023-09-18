@@ -24,7 +24,7 @@ TEIL 3: Apfel
 TEIL 4: Nutzeroberfläche (Aussehen des Spiels)
 
 1.  -   [ ] Farben einstellen
-    1.  -   [ ]Hintergrund: GRÜN
+    1.  -   [x] Hintergrund: GRÜN
     2.  -   [ ] Apfel: ROT
-    3.  -   [ ] Schlange: PINK
+    3.  -   [x] Schlange: PINK
     4.  -   [ ] Game Over: GELB

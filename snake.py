@@ -1,46 +1,48 @@
 import pygame
+import random
+
+from einstellungen import (
+    SCHWARZ,
+    WEIß,
+    PINK,
+    GRÜN,
+    ROT,
+    BLAU,
+    BILDSCHIRM_BREITE,
+    BILDSCHIRM_HÖHE,
+    PUNKT_DURCHMESSER,
+    PUNKT_BREITE,
+    PUNKT_HÖHE,
+    PIXEL_PRO_TICK,
+    HINTERGRUND_FARBE,
+    SCHLANGEN_FARBE,
+    APFEL_FARBE,
+)
+
 
 # starte Pygame
 pygame.init()
 
-# Bildschirm-Maße erstellen
-bildschirm_breite = 800
-bildschirm_höhe = 400
-
-# Farben
-SCHWARZ = (0, 0, 0)
-WEIß = (255, 255, 255)
-PINK = (255, 192, 203)
-GRÜN = (0, 255, 0)
-ROT = (255, 0, 0)
-BLAU = (0, 0, 255)
-
-hintergrund_farbe = GRÜN
-
 # Bildschirm mit Maßen erstellen
-bildschirm = pygame.display.set_mode((bildschirm_breite, bildschirm_höhe))
+bildschirm = pygame.display.set_mode((BILDSCHIRM_BREITE, BILDSCHIRM_HÖHE))
 
+schlange_körper = pygame.Surface((PUNKT_BREITE, PUNKT_HÖHE))
+schlange_körper.fill(SCHLANGEN_FARBE)
 
-# ein Punkt auf dem Bildschirm
-punkt_breite = 10
-punkt_höhe = 10
-
-pixel_pro_tick = punkt_breite // 2
-
-schlange_körper = pygame.Surface((punkt_breite, punkt_höhe))
-schlange_körper.fill(PINK)
-
-apfel_körper = pygame.Surface((punkt_breite, punkt_höhe))
-apfel_körper.fill(ROT)
+apfel_körper = pygame.Surface((PUNKT_BREITE, PUNKT_HÖHE))
+apfel_körper.fill(APFEL_FARBE)
 
 # Position der Schlange
 # Auf "links-rechts"-Achse vom Bildschirm soll die Schlange genau auf der Hälfte sein
-schlange_x = bildschirm_breite // 2
+schlange_x = BILDSCHIRM_BREITE // 2
 # Auf "unten-oben"-Achse vom Bildschirm soll die Schlange auch genau auf der Hälfte sein
-schlange_y = bildschirm_höhe // 2
-# Schlangen-Position ist Kombi auf schlange_x und schlange_y
+schlange_y = BILDSCHIRM_HÖHE // 2
+# Schlangen-Position ist Kombi aus schlange_x und schlange_y
 schlange_pos = [schlange_x, schlange_y]
 
+apfel_x = BILDSCHIRM_BREITE - 10 * PIXEL_PRO_TICK
+apfel_y = BILDSCHIRM_HÖHE - 10 * PIXEL_PRO_TICK
+apfel_pos = [apfel_x, apfel_y]
 
 RICHTUNG = "RECHTS"
 
@@ -71,29 +73,37 @@ while True:
             elif event.key == pygame.K_DOWN:
                 RICHTUNG = "UNTEN"
 
-    print("Richtung: ", RICHTUNG)
+            print("Richtung: ", RICHTUNG)
 
     # Schlange bewegt sich in RICHTUNG
     # Wenn Richtung = OBEN ist, soll Schlange sich nach oben bewegen
     if RICHTUNG == "OBEN":
-        schlange_y = schlange_y - pixel_pro_tick
+        schlange_y = schlange_y - PIXEL_PRO_TICK
     # Wenn Richtung = RECHTS ist, soll Schlange sich nach rechts bewegen
     elif RICHTUNG == "RECHTS":
-        schlange_x = schlange_x + pixel_pro_tick
+        schlange_x = schlange_x + PIXEL_PRO_TICK
     # Wenn Richtung = LINKS ist, soll Schlange sich nach links bewegen
     elif RICHTUNG == "LINKS":
-        schlange_x = schlange_x - pixel_pro_tick
+        schlange_x = schlange_x - PIXEL_PRO_TICK
     # Wenn Richtung = UNTEN ist, soll Schlange sich nach unten bewegen
     elif RICHTUNG == "UNTEN":
-        schlange_y = schlange_y + pixel_pro_tick
+        schlange_y = schlange_y + PIXEL_PRO_TICK
 
     schlange_pos = [schlange_x, schlange_y]
 
-    # Bildschirm "reinigen": alle Alte löschen und nur Hintergrundfarbe reinsetzen
-    bildschirm.fill(hintergrund_farbe)
+    # wenn Schlange Apfel isst:
+    if schlange_pos == apfel_pos:
+        # TODO
+        # Schlange wird um 1 größer
+        # Apfel teleportiert sich zufällig auf den Bildschirm
+        print("HMMMMM LECKER")
 
-    # Schlange in Bildschirm reinsetzen
+    # Bildschirm "reinigen": alle Alte löschen und nur Hintergrundfarbe reinsetzen
+    bildschirm.fill(HINTERGRUND_FARBE)
+
+    # Schlange und Apfel in Bildschirm reinsetzen
     bildschirm.blit(schlange_körper, schlange_pos)
+    bildschirm.blit(apfel_körper, apfel_pos)
 
     # Bildschirm anzeigen
     pygame.display.flip()

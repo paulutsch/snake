@@ -40,15 +40,16 @@ score = 0
 # Schlange bewegen
 uhr = pygame.time.Clock()
 
+spiel_läuft = True
+
 # Hauptteil des Spiels: Spiel wird immer wieder aktualisiert
-while True:
+while spiel_läuft:
     # Events durchschauen, ob ein Event namens "Beenden" dabei ist. Wenn ja, dann beenden!
     for event in pygame.event.get():
         # Ist das Event das Beenden-Event? Wenn ja, dann beende das Programm.
         if event.type == pygame.QUIT:
-            print("Nutzer beendet das Spiel.")
-            pygame.quit()
-            quit()
+            spiel_läuft = False
+
         # Ansonsten, wenn Taste gedrückt wurde, dann...:
         elif event.type == pygame.KEYDOWN:
             # Wenn Nutzer Pfeiltaste "Oben" gedrückt hat, dann setze RICHTUNG = "OBEN"
@@ -82,6 +83,25 @@ while True:
 
     schlange_pos = [schlange_x, schlange_y]
 
+    if (
+        (schlange_x >= einstellungen.BILDSCHIRM_BREITE)
+        or (schlange_x <= 0)
+        or (schlange_y <= 0)
+        or (schlange_y >= einstellungen.BILDSCHIRM_HÖHE)
+    ):
+        schrift = pygame.font.SysFont("Arial", 50)
+        game_over = schrift.render("GAME OVER", True, (255, 0, 0))
+        bildschirm.blit(
+            game_over,
+            [
+                einstellungen.BILDSCHIRM_BREITE // 2,
+                einstellungen.BILDSCHIRM_HÖHE // 2,
+            ],
+        )
+        pygame.display.flip()
+        pygame.time.wait(5000)
+        break
+
     # wenn Schlange Apfel isst:
     if schlange_pos == apfel_pos:
         # Punktestand um 15 erhöhen
@@ -113,9 +133,6 @@ while True:
     # Bildschirm "reinigen": alle Alte löschen und nur Hintergrundfarbe reinsetzen
     bildschirm.fill(einstellungen.HINTERGRUND_FARBE)
 
-    # Wände auf Bildschirm bringen
-    # TODO
-
     # Schlange und Apfel in Bildschirm reinsetzen
     bildschirm.blit(schlange_körper, schlange_pos)
     bildschirm.blit(apfel_körper, apfel_pos)
@@ -125,3 +142,7 @@ while True:
 
     # 20 Bilder pro Sekunde einstellen
     uhr.tick(15)
+
+print("Spiel wird beendet.")
+pygame.quit()
+quit()

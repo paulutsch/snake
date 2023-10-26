@@ -1,3 +1,3 @@
-# Hausaufgaben zum 26.10.23
+# Hausaufgaben zum nächsten mal
 
-1. Erkläre den Code in labor.py. Was macht die For-Schleife, und wann wird "Ausgeführt" ausgegeben?
+1. Erkläre, wie wir den Schlangenkörper erweitern. Erkläre, was anders ist als vorher. Falls du nicht weiterkommst, schreibe die Fragen auf, die du allein noch nicht beantworten kannst.

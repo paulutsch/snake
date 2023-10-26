@@ -11,10 +11,10 @@ bildschirm = pygame.display.set_mode(
     (einstellungen.BILDSCHIRM_BREITE, einstellungen.BILDSCHIRM_HÖHE)
 )
 
-schlange_körper = pygame.Surface(
+schlangen_körperteil = pygame.Surface(
     (einstellungen.PUNKT_DURCHMESSER, einstellungen.PUNKT_DURCHMESSER)
 )
-schlange_körper.fill(einstellungen.SCHLANGEN_FARBE)
+schlangen_körperteil.fill(einstellungen.SCHLANGEN_FARBE)
 
 apfel_körper = pygame.Surface(
     (einstellungen.PUNKT_DURCHMESSER, einstellungen.PUNKT_DURCHMESSER)
@@ -27,7 +27,8 @@ schlange_x = einstellungen.BILDSCHIRM_BREITE // 2
 # Auf "unten-oben"-Achse vom Bildschirm soll die Schlange auch genau auf der Hälfte sein
 schlange_y = einstellungen.BILDSCHIRM_HÖHE // 2
 # Schlangen-Position ist Kombi aus schlange_x und schlange_y
-schlange_pos = [schlange_x, schlange_y]
+schlangen_kopf = [schlange_x, schlange_y]
+schlangen_körper = [schlangen_kopf]
 
 apfel_x = einstellungen.BILDSCHIRM_BREITE - 10 * einstellungen.PIXEL_PRO_TICK
 apfel_y = einstellungen.BILDSCHIRM_HÖHE - 10 * einstellungen.PIXEL_PRO_TICK
@@ -65,8 +66,6 @@ while spiel_läuft:
             elif event.key == pygame.K_DOWN:
                 RICHTUNG = "UNTEN"
 
-            print("Richtung: ", RICHTUNG)
-
     # Schlange bewegt sich in RICHTUNG
     # Wenn Richtung = OBEN ist, soll Schlange sich nach oben bewegen
     if RICHTUNG == "OBEN":
@@ -80,8 +79,6 @@ while spiel_läuft:
     # Wenn Richtung = UNTEN ist, soll Schlange sich nach unten bewegen
     elif RICHTUNG == "UNTEN":
         schlange_y = schlange_y + einstellungen.PIXEL_PRO_TICK
-
-    schlange_pos = [schlange_x, schlange_y]
 
     if (
         (schlange_x >= einstellungen.BILDSCHIRM_BREITE)
@@ -102,8 +99,11 @@ while spiel_läuft:
         pygame.time.wait(5000)
         break
 
+    schlangen_kopf = [schlange_x, schlange_y]
+    schlangen_körper.append(schlangen_kopf)
+
     # wenn Schlange Apfel isst:
-    if schlange_pos == apfel_pos:
+    if schlangen_kopf == apfel_pos:
         # Punktestand um 15 erhöhen
         score = score + 15
         print("SCORE:", score)
@@ -129,12 +129,15 @@ while spiel_läuft:
 
         # Schlange wird um 1 größer
         print("HMMMMM LECKER")
+    else:
+        del schlangen_körper[0]
 
     # Bildschirm "reinigen": alle Alte löschen und nur Hintergrundfarbe reinsetzen
     bildschirm.fill(einstellungen.HINTERGRUND_FARBE)
 
     # Schlange und Apfel in Bildschirm reinsetzen
-    bildschirm.blit(schlange_körper, schlange_pos)
+    for körperteil in schlangen_körper:
+        bildschirm.blit(schlangen_körperteil, körperteil)
     bildschirm.blit(apfel_körper, apfel_pos)
 
     # Bildschirm anzeigen

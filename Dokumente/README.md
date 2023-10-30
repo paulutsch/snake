@@ -5,13 +5,15 @@ TEIL 1: Bildschirm
 3.  -   [x] Die Größen für Schlange und Apfel müssen definiert werden.
 4.  -   [x] Spiel muss durch Spieler beendbar sein. Dann muss sich Biodschirm schließen und Programm muss abbrechen.
 5.  -   [ ] Beschleunigungs-Knopf
- TEIL 2: Schlange
+            TEIL 2: Schlange
 
 6.  -   [x] Schlange muss erstellt werden (Punkt in pink).
 7.  -   [x] Schlange muss auf dem Bildschirm angezeigt werden.
 8.  -   [x] Schlange muss sich bewegen.
 9.  -   [x] Wenn Schlange über den Rand geht, dann GAME OVER.
-10. -   [ ] wenn beschleungungsknop gedrückt wird wird schlange scheneller und klener
+10. -   [x] Wenn Schlange Apfel isst, dann wird sie größer.
+11.     [ ] Wenn Schlange sich selbst berührt, dann GAME OVER.
+12. -   [ ] wenn beschleungungsknop gedrückt wird wird schlange scheneller und klener
     1.  -   [ ] => Spiel wird abgebrochen.
     2.  -   [ ] => 'GAME OVER' in der Mitte des Bildschirms.
     3.  -   [ ] => 'Lucy ist traurig 🥺' darunter.

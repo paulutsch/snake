@@ -22,5 +22,3 @@ if schlange_x == apfel_x and schlange_y == apfel_y:
 
 if len(schlangen_körper) > schlangen_länge:
     del schlangen_körper[0]
-
-

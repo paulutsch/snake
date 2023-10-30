@@ -1,0 +1,1 @@
+if (schlange_x >= einstellungen.BILDSCHRIMBREITE or schlange_y < 0) or (schlange_y >= einstellungen.BILDSCHRIRMHÖHE or schlange_y < 0) or (schlange_körper_liste.count((schlange_y, schlange_y)) > 1):

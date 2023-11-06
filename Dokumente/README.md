@@ -12,9 +12,9 @@ TEIL 1: Bildschirm
 8.  -   [x] Schlange muss sich bewegen.
 9.  -   [x] Wenn Schlange über den Rand geht, dann GAME OVER.
 10. -   [x] Wenn Schlange Apfel isst, dann wird sie größer.
-11.     [ ] Wenn Schlange sich selbst berührt, dann GAME OVER.
+11.     [x] Wenn Schlange sich selbst berührt, dann GAME OVER.
 12. -   [ ] wenn beschleungungsknop gedrückt wird wird schlange scheneller und klener
-    1.  -   [ ] => Spiel wird abgebrochen.
+    1.  -   [x] => Spiel wird abgebrochen.
     2.  -   [ ] => 'GAME OVER' in der Mitte des Bildschirms.
     3.  -   [ ] => 'Lucy ist traurig 🥺' darunter.
 

@@ -1,203 +1,41 @@
 import pygame
-import random
-import einstellungen
+from logik import (
+    events_prüfen,
+    schlange_bewegen,
+    wandcrash_prüfen,
+    selbstcrash_prüfen,
+    apfel_essen_prüfen,
+    apfel_teleportieren,
+    bildschirm_rendern,
+)
 
-# starte Pygame
 pygame.init()
 
-# Bildschirm mit Maßen erstellen
-bildschirm = pygame.display.set_mode(
-    (einstellungen.BILDSCHIRM_BREITE, einstellungen.BILDSCHIRM_HÖHE)
-)
-
-schlangen_oberfläche = pygame.Surface(
-    (einstellungen.PUNKT_DURCHMESSER, einstellungen.PUNKT_DURCHMESSER)
-)
-schlangen_oberfläche.fill(einstellungen.SCHLANGEN_FARBE)
-
-apfel_oberfläche = pygame.Surface(
-    (einstellungen.PUNKT_DURCHMESSER, einstellungen.PUNKT_DURCHMESSER)
-)
-apfel_oberfläche.fill(einstellungen.APFEL_FARBE)
-
-# Position der Schlange
-# Auf "links-rechts"-Achse vom Bildschirm soll die Schlange genau auf der Hälfte sein
-schlange_x = einstellungen.BILDSCHIRM_BREITE // 2
-# Auf "unten-oben"-Achse vom Bildschirm soll die Schlange auch genau auf der Hälfte sein
-schlange_y = einstellungen.BILDSCHIRM_HÖHE // 2
-# Schlangen-Position ist Kombi aus schlange_x und schlange_y
-schlangen_kopf = [schlange_x, schlange_y]
-schlangen_körper_liste = [
-    schlangen_kopf
-]  # Schlangenkopf wird in Schlanegekörperliste gespeichert
-
-apfel_x = einstellungen.BILDSCHIRM_BREITE - 10 * einstellungen.PIXEL_PRO_TICK
-apfel_y = einstellungen.BILDSCHIRM_HÖHE - 10 * einstellungen.PIXEL_PRO_TICK
-apfel_pos_liste = [apfel_x, apfel_y]
-
-RICHTUNG = "RECHTS"
-
-score = 0
-
-# Schlange bewegen
 uhr = pygame.time.Clock()
 
 spiel_läuft = True
+score = 0
 
-
-def schlange_bewegen():
-    global schlange_x
-    global schlange_y
-    global schlangen_kopf
-    global schlangen_körper_liste
-
-    # Schlange bewegt sich in RICHTUNG
-    # Wenn Richtung = OBEN ist, soll Schlange sich nach oben bewegen
-    if RICHTUNG == "OBEN":
-        schlange_y = schlange_y - einstellungen.PIXEL_PRO_TICK
-    # Wenn Richtung = RECHTS ist, soll Schlange sich nach rechts bewegen
-    elif RICHTUNG == "RECHTS":
-        schlange_x = schlange_x + einstellungen.PIXEL_PRO_TICK
-    # Wenn Richtung = LINKS ist, soll Schlange sich nach links bewegen
-    elif RICHTUNG == "LINKS":
-        schlange_x = schlange_x - einstellungen.PIXEL_PRO_TICK
-    # Wenn Richtung = UNTEN ist, soll Schlange sich nach unten bewegen
-    elif RICHTUNG == "UNTEN":
-        schlange_y = schlange_y + einstellungen.PIXEL_PRO_TICK
-
-    schlangen_kopf = [schlange_x, schlange_y]
-    schlangen_körper_liste.append(schlangen_kopf)
-    if schlangen_kopf != apfel_pos_liste:
-        del schlangen_körper_liste[0]
-
-
-def events_prüfen():
-    global spiel_läuft
-    global RICHTUNG
-
-    # Events durchschauen, ob ein Event namens "Beenden" dabei ist. Wenn ja, dann beenden!
-    for event in pygame.event.get():
-        # Ist das Event das Beenden-Event? Wenn ja, dann beende das Programm.
-        if event.type == pygame.QUIT:
-            spiel_läuft = False
-
-        # Ansonsten, wenn Taste gedrückt wurde, dann...:
-        elif event.type == pygame.KEYDOWN:
-            # Wenn Nutzer Pfeiltaste "Oben" gedrückt hat, dann setze RICHTUNG = "OBEN"
-            if event.key == pygame.K_UP:
-                RICHTUNG = "OBEN"
-            # Ansonsten, wenn Nutzer Pfeiltaste "Rechts" gedrückt hat, dann setze RICHTUNG = "RECHTS"
-            elif event.key == pygame.K_RIGHT:
-                RICHTUNG = "RECHTS"
-            # Ansonsten, wenn Nutzer Pfeiltaste "Links" gedrückt hat, dann setze RICHTUNG = "LINKS"
-            elif event.key == pygame.K_LEFT:
-                RICHTUNG = "LINKS"
-            # Ansonsten, wenn Nutzer Pfeiltaste "Unten" gedrückt hat, dann setze RICHTUNG = "Unten"
-            elif event.key == pygame.K_DOWN:
-                RICHTUNG = "UNTEN"
-
-
-def wandcrash():
-    # Wand-Check
-    if (
-        (schlange_x >= einstellungen.BILDSCHIRM_BREITE)
-        or (schlange_x <= 0)
-        or (schlange_y <= 0)
-        or (schlange_y >= einstellungen.BILDSCHIRM_HÖHE)
-    ):
-        return True
-    else:
-        return False
-
-
-def selbstcrash():
-    # Schlangen-Crash in sich selbst checken
-    anzahl_körperteile = len(schlangen_körper_liste)
-    for i in range(anzahl_körperteile):
-        körperteil = schlangen_körper_liste[i]
-
-        # wenn letztes Körperteil, also Kopfteil, dann überspringe
-        if i == anzahl_körperteile - 1:
-            pass
-        elif schlangen_kopf == körperteil:
-            # game over
-            return True
-
-    return False
-
-
-def bildschirm_rendern():
-    # Bildschirm "reinigen": alle Alte löschen und nur Hintergrundfarbe reinsetzen
-    bildschirm.fill(einstellungen.HINTERGRUND_FARBE)
-
-    # Schlange und Apfel in Bildschirm reinsetzen
-    # schlangen_körper_liste = [ [körperteil_x, körperteil_y], [körperteil_x, körperteil_y], [körperteil_x, körperteil_y] ]
-    for körperteil_pos_liste in schlangen_körper_liste:
-        bildschirm.blit(schlangen_oberfläche, körperteil_pos_liste)
-    bildschirm.blit(apfel_oberfläche, apfel_pos_liste)
-
-    # Bildschirm anzeigen
-    pygame.display.flip()
-
-
-def apfel_essen():
-    global apfel_pos_liste
-    # Apfel teleportiert sich zufällig an neue Position auf dem Bildschirm
-    apfel_x = (
-        random.randint(
-            0,
-            (einstellungen.BILDSCHIRM_BREITE // 10) - 1,
-        )
-        * einstellungen.PUNKT_DURCHMESSER
-    )
-
-    apfel_y = (
-        random.randint(
-            0,
-            (einstellungen.BILDSCHIRM_HÖHE // 10) - 1,
-        )
-        * einstellungen.PUNKT_DURCHMESSER
-    )
-
-    apfel_pos_liste = [apfel_x, apfel_y]
-
-    # Schlange wird um 1 größer
-    print("HMMMMM LECKER")
-
-
-def game_over():
-    schrift = pygame.font.SysFont("Arial", 50)
-    game_over = schrift.render("GAME OVER", True, (255, 0, 0))
-    bildschirm.blit(
-        game_over,
-        [
-            einstellungen.BILDSCHIRM_BREITE // 2,
-            einstellungen.BILDSCHIRM_HÖHE // 2,
-        ],
-    )
-    pygame.display.flip()
-    pygame.time.wait(5000)
-
-
-# Hauptteil des Spiels: Spiel wird immer wieder aktualisiert
+# Hauptteil des Spielsa: Spiel wird immer wieder aktualisiert
 while spiel_läuft:
-    events_prüfen()
+    spiel_läuft = events_prüfen()
     schlange_bewegen()
 
-    if wandcrash() or selbstcrash():
-        game_over()
+    wand_gecrasht = wandcrash_prüfen()
+    selbst_gecrasht = selbstcrash_prüfen()
+    if wand_gecrasht or selbst_gecrasht:
+        spiel_läuft = False
         break
 
-    if schlangen_kopf == apfel_pos_liste:
-        apfel_essen()
-
-        # Punktestand um 15 erhöhen
-        score = score + 15
-        print("SCORE:", score)
+    apfel_gegessen = apfel_essen_prüfen()
+    if apfel_gegessen:
+        apfel_teleportieren()
+        score += 10
+        print("SCORE:✭", score)
 
     bildschirm_rendern()
 
-    # 15 Bilder pro Sekunde einstellen
+    # 20 Bilder pro Sekunde einstellen
     uhr.tick(20)
 
 print("Spiel wird beendet.")

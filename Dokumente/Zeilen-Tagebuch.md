@@ -6,3 +6,7 @@
 
 06.11.23:
 172
+
+20.11.23:
+logik.py: 193 Zeilen
+snake.py: 43 Zeilen

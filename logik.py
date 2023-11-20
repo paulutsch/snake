@@ -2,7 +2,17 @@ import einstellungen
 import pygame
 import random
 
-# Position der Schlange
+# Bilder
+gras_bild = pygame.image.load("bilder/gras.png")
+game_over_bild = pygame.image.load("bilder/game_over.png")
+
+game_over_oberfläche = pygame.transform.scale(
+    game_over_bild,
+    (einstellungen.BILDSCHIRM_BREITE // 2, einstellungen.BILDSCHIRM_HÖHE // 2),
+)
+gras_oberfläche = pygame.transform.scale(
+    gras_bild, (einstellungen.BILDSCHIRM_BREITE, einstellungen.BILDSCHIRM_HÖHE)
+)
 
 # Auf "links-rechts"-Achse vom Bildschirm soll die Schlange genau auf der Hälfte sein
 schlange_x = einstellungen.BILDSCHIRM_BREITE // 2
@@ -13,7 +23,7 @@ schlange_y = einstellungen.BILDSCHIRM_HÖHE // 2
 schlangen_kopf = [schlange_x, schlange_y]
 schlangen_körper_liste = [
     schlangen_kopf
-]  # Schlangenkopf wird in Schlanegekörperliste gespeichert
+]  # Schlangenkopf wird in Schlangenkörperliste gespeichert
 
 apfel_x = einstellungen.BILDSCHIRM_BREITE - 10 * einstellungen.PIXEL_PRO_TICK
 apfel_y = einstellungen.BILDSCHIRM_HÖHE - 10 * einstellungen.PIXEL_PRO_TICK
@@ -85,14 +95,9 @@ def apfel_essen_prüfen():
 def game_over():
     global bildschirm
 
-    schrift = pygame.font.SysFont("Arial", 50)
-    game_over = schrift.render("GAME OVER", True, (255, 0, 0))
     bildschirm.blit(
-        game_over,
-        [
-            einstellungen.BILDSCHIRM_BREITE // 2,
-            einstellungen.BILDSCHIRM_HÖHE // 2,
-        ],
+        game_over_oberfläche,
+        (einstellungen.BILDSCHIRM_BREITE // 4, einstellungen.BILDSCHIRM_HÖHE // 4),
     )
     pygame.display.flip()
     pygame.time.wait(5000)
@@ -159,7 +164,7 @@ def bildschirm_rendern():
     global apfel_oberfläche
 
     # Bildschirm "reinigen": alle Alte löschen und nur Hintergrundfarbe reinsetzen
-    bildschirm.fill(einstellungen.HINTERGRUND_FARBE)
+    bildschirm.blit(gras_oberfläche, (0, 0))
 
     # Schlange und Apfel in Bildschirm reinsetzen
     # schlangen_körper_liste = [ [körperteil_x, körperteil_y], [körperteil_x, körperteil_y], [körperteil_x, körperteil_y] ]
